@@ -4,6 +4,7 @@ import time
 import traceback
 import os
 import csv
+from datetime import date
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -23,6 +24,9 @@ drv = webdriver.Safari(executable_path=webDrv)
 herf_list = []
 
 try:
+    today = date.today()
+    print('Today {}'.format(today))
+    
     drv.get(targetURL)
     category = drv.find_elements(By.CLASS_NAME, 'btn_cate_all')
     category[0].click()
@@ -40,8 +44,11 @@ try:
         #print('len {}'.format(len(get_items)))
 
     print('Link count : {}'.format(len(herf_list)))
-    # Access to fisrt link 
+# Access to fisrt link 
+# 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
     drv.get(herf_list[0])
+    product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
+    print('product count : {}'.format(len(product_list)))
 
 except:
     traceback.print_exc()
