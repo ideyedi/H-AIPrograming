@@ -44,11 +44,23 @@ try:
         #print('len {}'.format(len(get_items)))
 
     print('Link count : {}'.format(len(herf_list)))
-# Access to fisrt link 
-# 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
+    # Access to fisrt link 
+    # 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
     drv.get(herf_list[0])
     product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
     print('product count : {}'.format(len(product_list)))
+
+    '''
+    mainClass: 대 분류
+    midClass : 중 분류
+    subClass : 소 분류
+    '''
+    mainClass = drv.find_elements(By.CLASS_NAME, 'f dir_home')
+    mainClass = mainClass[0]
+    print('mainClass : {}'.format(mainClass.find_elements(By.CLASS_NAME, 'a')[0].text))
+    categoryList = drv.find_elements(By.CLASS_NAME, 'dir_item')
+    midClass, subClass = categoryList[0], categoryList[1]
+    
 
 except:
     traceback.print_exc()
