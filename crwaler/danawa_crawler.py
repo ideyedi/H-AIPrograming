@@ -11,6 +11,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
+def getProductInfo():
+    print('hello')
+
 '''
 webDrv
 targetURL
@@ -55,13 +58,20 @@ try:
     midClass : 중 분류
     subClass : 소 분류
     '''
-    mainClass = drv.find_elements(By.CLASS_NAME, 'f dir_home')
-    mainClass = mainClass[0]
-    print('mainClass : {}'.format(mainClass.find_elements(By.CLASS_NAME, 'a')[0].text))
+    #mainClass = drv.find_elements(By.CLASS_NAME, 'f dir_home')
+    #print('mainClass : {}'.format(len(mainClass)))
+    #print('mainClass : {}'.format(mainClass.find_elements(By.CLASS_NAME, 'a')[0].text))
     categoryList = drv.find_elements(By.CLASS_NAME, 'dir_item')
-    midClass, subClass = categoryList[0], categoryList[1]
-    
+    mainClass, midClass, subClass = categoryList[1], categoryList[2], categoryList[3]
+    #print(mainClass.dtype, midClass.dtype)
+    mainClass = mainClass.find_elements(By.TAG_NAME, 'span')[0].text
+    midClass = midClass.find_elements(By.TAG_NAME, 'span')[0].text
+    subClass = subClass.find_elements(By.TAG_NAME, 'span')[0].text
+    print('{}->{}->{}'.format(mainClass, midClass, subClass))
 
+    # Crawling product info
+    getProductInfo()
+        
 except:
     traceback.print_exc()
 
