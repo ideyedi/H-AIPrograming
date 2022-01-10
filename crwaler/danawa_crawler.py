@@ -1,4 +1,4 @@
-# !python 
+#! python 
 # encoding: UTF-8
 import time
 import traceback
