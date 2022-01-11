@@ -5,14 +5,27 @@ import traceback
 import os
 import csv
 from datetime import date
+from typing import List
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
-def getProductInfo():
-    print('hello')
+
+'''
+Get Danawa product infomation
+for my research
+'''
+def getProductInfo(drv) -> List:
+    resultList = []
+    resultList.append(drv)
+    productList = drv.find_elements(By.CLASS_NAME, 'prod_layer') 
+    print("count: {}".format(len(productList)))
+    
+
+    return resultList
+
 
 '''
 webDrv
@@ -70,7 +83,13 @@ try:
     print('{}->{}->{}'.format(mainClass, midClass, subClass))
 
     # Crawling product info
-    getProductInfo()
+    # Maybe for-loop here
+    print(getProductInfo(drv))
+
+    # Move Tab
+    # Maybe using click event
+    numTab = drv.find_elements(By.CLASS_NAME, 'number_wrap')[0].find_elements(By.TAG_NAME, 'a')
+    #print(len(numTab))
         
 except:
     traceback.print_exc()
