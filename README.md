@@ -2,9 +2,9 @@
 
 ### Abstract
 인공지능으로 전자상거래 이상데이터 탐지 연구
-> 휴먼 프로세스 대비 Accurecy
-> un-supervised learning을 이용하 접근 방법 고려
->> Labeling cost reduce..
+- 휴먼 프로세스 대비 Accurecy
+    - un-supervised learning을 이용하 접근 방법 고려
+    - Labeling cost reduce..
 
 ### Feature
 |대분류|중분류|소분류|상품명|제품코드|가격|배송비|판매자|플랫폼|등록일|수집일|  
