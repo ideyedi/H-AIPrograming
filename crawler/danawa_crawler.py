@@ -19,11 +19,37 @@ for my research
 '''
 def getProductInfo(drv) -> List:
     resultList = []
+    linkList = []
     resultList.append(drv)
     productList = drv.find_elements(By.CLASS_NAME, 'prod_layer') 
-    print("count: {}".format(len(productList)))
+    #print("count: {}".format(len(productList)))
     
+    for product in productList:
+        div = product.find_elements(By.CLASS_NAME, 'thumb_image')
+        #print("div count : {}".format(len(div)))
+        linkList.append(div[0].find_elements(By.TAG_NAME, 'a')[0].get_attribute('href'))
 
+    # Save parents URL
+    parents = drv.current_url
+    #print(parents)
+
+    for url in linkList:
+        drv.get(url)
+        diff_items = drv.find_elements(By.CLASS_NAME, 'diff_item')
+        
+        for idx, item in enumerate(diff_items):
+            try:
+                link = item.find_elements(By.CLASS_NAME, 'prc_line')
+                link = link[0].find_elements(By.CLASS_NAME, 'priceCompareBuyLink')
+                link = link[0].get_attribute('href')
+            except:
+                print('skip')
+                continue
+            
+            print(link)
+
+    # Return parents Page
+    drv.get(parents)
     return resultList
 
 
@@ -95,6 +121,6 @@ except:
     traceback.print_exc()
 
 finally:
-    time.sleep(3)
+    #time.sleep(3)
     drv.quit()
     print('Quit crawlering')
