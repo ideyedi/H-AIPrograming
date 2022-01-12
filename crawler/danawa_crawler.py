@@ -38,18 +38,41 @@ def getProductInfo(drv) -> List:
         diff_items = drv.find_elements(By.CLASS_NAME, 'diff_item')
         
         for idx, item in enumerate(diff_items):
+            tmp = []
             try:
+                # Get url
                 link = item.find_elements(By.CLASS_NAME, 'prc_line')
                 link = link[0].find_elements(By.CLASS_NAME, 'priceCompareBuyLink')
                 link = link[0].get_attribute('href')
+
+                # Mall info
+                d_mall = item.find_elements(By.CLASS_NAME, 'd_mall')[0].find_elements(By.TAG_NAME, 'img')[0].get_attribute('alt')
+
+                # price, ship fee
+                price = item.find_elements(By.CLASS_NAME, 'prc_c')[0].text
+                ship  = item.find_elements(By.CLASS_NAME, 'ship')[0].text
+                print(d_mall, price, ship)
+                print(link)
+                print('-'*10)
+
+                tmp.append(d_mall)
+                tmp.append(link)
+
+                resultList.append(tmp)
+            
             except:
                 print('skip')
                 continue
-            
-            print(link)
+
+            ## Test code 
+            if idx > 5:
+                break
+
+        break
 
     # Return parents Page
     drv.get(parents)
+    
     return resultList
 
 
@@ -110,7 +133,7 @@ try:
 
     # Crawling product info
     # Maybe for-loop here
-    print(getProductInfo(drv))
+    getProductInfo(drv)
 
     # Move Tab
     # Maybe using click event
