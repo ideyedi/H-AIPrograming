@@ -17,10 +17,10 @@ from selenium.webdriver.common.by import By
 Get Danawa product infomation
 for my research
 '''
-def getProductInfo(drv) -> List:
+def getProductInfo(drv, cate) -> List:
     resultList = []
     linkList = []
-    resultList.append(drv)
+    #resultList.append(drv)
     productList = drv.find_elements(By.CLASS_NAME, 'prod_layer') 
     #print("count: {}".format(len(productList)))
     
@@ -36,9 +36,15 @@ def getProductInfo(drv) -> List:
     for url in linkList:
         drv.get(url)
         diff_items = drv.find_elements(By.CLASS_NAME, 'diff_item')
-        
+
+        # Get name
+        prod_name = drv.find_elements(By.CLASS_NAME, 'prod_tit')[0].text
+                
         for idx, item in enumerate(diff_items):
+            # product list
             tmp = []
+            tmp += cate
+
             try:
                 # Get url
                 link = item.find_elements(By.CLASS_NAME, 'prc_line')
@@ -50,30 +56,42 @@ def getProductInfo(drv) -> List:
 
                 # price, ship fee
                 price = item.find_elements(By.CLASS_NAME, 'prc_c')[0].text
-                ship  = item.find_elements(By.CLASS_NAME, 'ship')[0].text
-                print(d_mall, price, ship)
-                print(link)
-                print('-'*10)
+                ship  = item.find_elements(By.CLASS_NAME, 'ship')[0].text  
+               
+                #print(d_mall, price, ship)
+                #print(link)
+                #print('-'*10)
 
+                # product List
+                tmp.append(prod_name)
+                tmp.append(price)
+                tmp.append(ship)
                 tmp.append(d_mall)
                 tmp.append(link)
 
-                resultList.append(tmp)
-            
             except:
                 print('skip')
                 continue
 
+            # Products List
+            resultList.append(tmp)
+
             ## Test code 
             if idx > 5:
-                break
-
+                break 
+            
         break
 
     # Return parents Page
     drv.get(parents)
     
     return resultList
+
+
+def MakeCSV():
+    ret = True
+
+    return ret
 
 
 '''
@@ -129,16 +147,25 @@ try:
     mainClass = mainClass.find_elements(By.TAG_NAME, 'span')[0].text
     midClass = midClass.find_elements(By.TAG_NAME, 'span')[0].text
     subClass = subClass.find_elements(By.TAG_NAME, 'span')[0].text
+    
+    cate = []
     print('{}->{}->{}'.format(mainClass, midClass, subClass))
+    cate.append(mainClass)
+    cate.append(midClass)
+    cate.append(subClass)
 
     # Crawling product info
     # Maybe for-loop here
-    getProductInfo(drv)
+    resultList = []
+    resultList = getProductInfo(drv, cate)
+    
+    for item in resultList:
+        print(item)
 
     # Move Tab
     # Maybe using click event
     numTab = drv.find_elements(By.CLASS_NAME, 'number_wrap')[0].find_elements(By.TAG_NAME, 'a')
-    #print(len(numTab))
+    print("numTab: {}".format(len(numTab)))
         
 except:
     traceback.print_exc()
