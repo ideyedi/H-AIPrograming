@@ -4,7 +4,8 @@ import time
 import traceback
 import os
 import csv
-from datetime import date
+
+from datetime import datetime as dt
 from typing import List
 
 from selenium import webdriver
@@ -17,10 +18,10 @@ from selenium.webdriver.common.by import By
 Get Danawa product infomation
 for my research
 '''
-def getProductInfo(drv) -> List:
+def getProductInfo(drv, cate) -> List:
     resultList = []
     linkList = []
-    resultList.append(drv)
+    #resultList.append(drv)
     productList = drv.find_elements(By.CLASS_NAME, 'prod_layer') 
     #print("count: {}".format(len(productList)))
     
@@ -33,12 +34,23 @@ def getProductInfo(drv) -> List:
     parents = drv.current_url
     #print(parents)
 
-    for url in linkList:
+    for idx, url in enumerate(linkList):
         drv.get(url)
         diff_items = drv.find_elements(By.CLASS_NAME, 'diff_item')
-        
+
+        if idx >= len(linkList) - 1:
+            print('last product is skipped')
+            break
+
+        # Get name
+        prod_name = drv.find_elements(By.CLASS_NAME, 'prod_tit')[0].text
+        print('product_name : {}'.format(prod_name))
+                
         for idx, item in enumerate(diff_items):
+            # product list
             tmp = []
+            tmp += cate
+
             try:
                 # Get url
                 link = item.find_elements(By.CLASS_NAME, 'prc_line')
@@ -50,30 +62,54 @@ def getProductInfo(drv) -> List:
 
                 # price, ship fee
                 price = item.find_elements(By.CLASS_NAME, 'prc_c')[0].text
-                ship  = item.find_elements(By.CLASS_NAME, 'ship')[0].text
-                print(d_mall, price, ship)
-                print(link)
-                print('-'*10)
+                ship  = item.find_elements(By.CLASS_NAME, 'ship')[0].text  
+               
+                #print(d_mall, price, ship)
+                #print(link)
+                #print('-'*10)
 
+                # product List
+                tmp.append(prod_name)
+                tmp.append(price)
+                tmp.append(ship)
                 tmp.append(d_mall)
                 tmp.append(link)
 
-                resultList.append(tmp)
-            
             except:
-                print('skip')
+                #print('skip')
                 continue
 
-            ## Test code 
-            if idx > 5:
-                break
+            # Products List
+            resultList.append(tmp)
 
-        break
+            ## Test code 
+            #if idx > 5:
+            #    break 
+            
+        #break
 
     # Return parents Page
     drv.get(parents)
     
     return resultList
+
+
+'''
+function description 
+Save List to csv
+'''
+def MakeCSV(today, productsList):
+    ret = True
+    headers = ['main', 'mid', 'sub', 'name', 'price', 'ship', 'platform', 'link', 'label']
+    rows = productsList
+    
+    with open('./data/' + today+'.csv', 'w') as f:
+        w = csv.writer(f)
+        w.writerow(headers)
+        ret = w.writerows(productsList)
+
+    print("writerResult: {}".format(ret))
+    return ret
 
 
 '''
@@ -89,7 +125,8 @@ drv = webdriver.Safari(executable_path=webDrv)
 herf_list = []
 
 try:
-    today = date.today()
+    today = dt.now()
+    today = today.strftime("%y%m%d.%H%M")
     print('Today {}'.format(today))
     
     drv.get(targetURL)
@@ -111,7 +148,9 @@ try:
     print('Link count : {}'.format(len(herf_list)))
     # Access to fisrt link 
     # 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
-    drv.get(herf_list[0])
+    # 가전 index : 6
+    drv.get(herf_list[8])
+    
     product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
     print('product count : {}'.format(len(product_list)))
 
@@ -129,16 +168,27 @@ try:
     mainClass = mainClass.find_elements(By.TAG_NAME, 'span')[0].text
     midClass = midClass.find_elements(By.TAG_NAME, 'span')[0].text
     subClass = subClass.find_elements(By.TAG_NAME, 'span')[0].text
+    
+    cate = []
     print('{}->{}->{}'.format(mainClass, midClass, subClass))
+    cate.append(mainClass)
+    cate.append(midClass)
+    cate.append(subClass)
 
     # Crawling product info
     # Maybe for-loop here
-    getProductInfo(drv)
+    resultList = []
+    resultList = getProductInfo(drv, cate)
+    
+    # Debug
+    #for item in resultList:
+    #    print(item)
+    MakeCSV(today, resultList)
 
     # Move Tab
     # Maybe using click event
     numTab = drv.find_elements(By.CLASS_NAME, 'number_wrap')[0].find_elements(By.TAG_NAME, 'a')
-    #print(len(numTab))
+    print("numTab: {}".format(len(numTab)))
         
 except:
     traceback.print_exc()
