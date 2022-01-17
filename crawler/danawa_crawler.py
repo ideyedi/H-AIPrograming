@@ -33,12 +33,17 @@ def getProductInfo(drv, cate) -> List:
     parents = drv.current_url
     #print(parents)
 
-    for url in linkList:
+    for idx, url in enumerate(linkList):
         drv.get(url)
         diff_items = drv.find_elements(By.CLASS_NAME, 'diff_item')
 
+        if idx >= len(linkList) - 1:
+            print('last product is skipped')
+            break
+
         # Get name
         prod_name = drv.find_elements(By.CLASS_NAME, 'prod_tit')[0].text
+        print('product_name : {}'.format(prod_name))
                 
         for idx, item in enumerate(diff_items):
             # product list
@@ -70,17 +75,17 @@ def getProductInfo(drv, cate) -> List:
                 tmp.append(link)
 
             except:
-                print('skip')
+                #print('skip')
                 continue
 
             # Products List
             resultList.append(tmp)
 
             ## Test code 
-            if idx > 5:
-                break 
+            #if idx > 5:
+            #    break 
             
-        break
+        #break
 
     # Return parents Page
     drv.get(parents)
@@ -129,7 +134,8 @@ try:
     print('Link count : {}'.format(len(herf_list)))
     # Access to fisrt link 
     # 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
-    drv.get(herf_list[0])
+    drv.get(herf_list[5])
+    
     product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
     print('product count : {}'.format(len(product_list)))
 
