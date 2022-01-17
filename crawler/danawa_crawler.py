@@ -4,7 +4,8 @@ import time
 import traceback
 import os
 import csv
-from datetime import date
+
+from datetime import datetime as dt
 from typing import List
 
 from selenium import webdriver
@@ -93,9 +94,21 @@ def getProductInfo(drv, cate) -> List:
     return resultList
 
 
-def MakeCSV():
+'''
+function description 
+Save List to csv
+'''
+def MakeCSV(today, productsList):
     ret = True
+    headers = ['main', 'mid', 'sub', 'name', 'price', 'ship', 'platform', 'link', 'label']
+    rows = productsList
+    
+    with open('./data/' + today+'.csv', 'w') as f:
+        w = csv.writer(f)
+        w.writerow(headers)
+        ret = w.writerows(productsList)
 
+    print("writerResult: {}".format(ret))
     return ret
 
 
@@ -112,7 +125,8 @@ drv = webdriver.Safari(executable_path=webDrv)
 herf_list = []
 
 try:
-    today = date.today()
+    today = dt.now()
+    today = today.strftime("%y%m%d.%H%M")
     print('Today {}'.format(today))
     
     drv.get(targetURL)
@@ -134,7 +148,8 @@ try:
     print('Link count : {}'.format(len(herf_list)))
     # Access to fisrt link 
     # 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
-    drv.get(herf_list[5])
+    # 가전 index : 6
+    drv.get(herf_list[8])
     
     product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
     print('product count : {}'.format(len(product_list)))
@@ -165,8 +180,10 @@ try:
     resultList = []
     resultList = getProductInfo(drv, cate)
     
-    for item in resultList:
-        print(item)
+    # Debug
+    #for item in resultList:
+    #    print(item)
+    MakeCSV(today, resultList)
 
     # Move Tab
     # Maybe using click event
