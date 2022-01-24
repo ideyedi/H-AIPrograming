@@ -2,37 +2,39 @@
 # encoding: UTF-8
 import time
 import traceback
-import os
 import csv
+import os
 
 from datetime import datetime as dt
 from typing import List
 
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
 
 
 '''
 Get Danawa product infomation
 for my research
 '''
+
+
 def getProductInfo(drv, cate) -> List:
     resultList = []
     linkList = []
-    #resultList.append(drv)
+    # resultList.append(drv)
     productList = drv.find_elements(By.CLASS_NAME, 'prod_layer') 
-    #print("count: {}".format(len(productList)))
+    # print("count: {}".format(len(productList)))
     
     for product in productList:
         div = product.find_elements(By.CLASS_NAME, 'thumb_image')
-        #print("div count : {}".format(len(div)))
+        # print("div count : {}".format(len(div)))
         linkList.append(div[0].find_elements(By.TAG_NAME, 'a')[0].get_attribute('href'))
 
     # Save parents URL
     parents = drv.current_url
-    #print(parents)
+    # print(parents)
 
     for idx, url in enumerate(linkList):
         drv.get(url)
@@ -46,7 +48,7 @@ def getProductInfo(drv, cate) -> List:
         prod_name = drv.find_elements(By.CLASS_NAME, 'prod_tit')[0].text
         print('product_name : {}'.format(prod_name))
                 
-        for idx, item in enumerate(diff_items):
+        for item in diff_items:
             # product list
             tmp = []
             tmp += cate
@@ -58,15 +60,16 @@ def getProductInfo(drv, cate) -> List:
                 link = link[0].get_attribute('href')
 
                 # Mall info
-                d_mall = item.find_elements(By.CLASS_NAME, 'd_mall')[0].find_elements(By.TAG_NAME, 'img')[0].get_attribute('alt')
+                d_mall = item.find_elements(By.CLASS_NAME, 'd_mall')[0].find_elements(By.TAG_NAME, 'img')[0]
+                d_mall = d_mall.get_attribute('alt')
 
                 # price, ship fee
                 price = item.find_elements(By.CLASS_NAME, 'prc_c')[0].text
-                ship  = item.find_elements(By.CLASS_NAME, 'ship')[0].text  
+                ship = item.find_elements(By.CLASS_NAME, 'ship')[0].text
                
-                #print(d_mall, price, ship)
-                #print(link)
-                #print('-'*10)
+                # print(d_mall, price, ship)
+                # print(link)
+                # print('-'*10)
 
                 # product List
                 tmp.append(prod_name)
@@ -76,17 +79,11 @@ def getProductInfo(drv, cate) -> List:
                 tmp.append(link)
 
             except:
-                #print('skip')
+                print('skip')
                 continue
 
             # Products List
             resultList.append(tmp)
-
-            ## Test code 
-            #if idx > 5:
-            #    break 
-            
-        #break
 
     # Return parents Page
     drv.get(parents)
@@ -118,8 +115,8 @@ targetURL
 '''
 webDrv = '/usr/bin/safaridriver'
 targetURL = 'http://www.danawa.com'
-#opt = webdriver.SafariOptions()
-#opt.add_argument('--incognito')
+# opt = webdriver.SafariOptions()
+# opt.add_argument('--incognito')
 
 drv = webdriver.Safari(executable_path=webDrv)
 herf_list = []
@@ -143,7 +140,7 @@ try:
         get_items = items.find_elements(By.CLASS_NAME, 'item')
         a_tag = get_items[0].find_elements(By.TAG_NAME, 'a')
         herf_list.append(a_tag[0].get_attribute('href'))
-        #print('len {}'.format(len(get_items)))
+        # print('len {}'.format(len(get_items)))
 
     print('Link count : {}'.format(len(herf_list)))
     # Access to fisrt link 
@@ -159,12 +156,12 @@ try:
     midClass : 중 분류
     subClass : 소 분류
     '''
-    #mainClass = drv.find_elements(By.CLASS_NAME, 'f dir_home')
-    #print('mainClass : {}'.format(len(mainClass)))
-    #print('mainClass : {}'.format(mainClass.find_elements(By.CLASS_NAME, 'a')[0].text))
+    # mainClass = drv.find_elements(By.CLASS_NAME, 'f dir_home')
+    # print('mainClass : {}'.format(len(mainClass)))
+    # print('mainClass : {}'.format(mainClass.find_elements(By.CLASS_NAME, 'a')[0].text))
     categoryList = drv.find_elements(By.CLASS_NAME, 'dir_item')
     mainClass, midClass, subClass = categoryList[1], categoryList[2], categoryList[3]
-    #print(mainClass.dtype, midClass.dtype)
+    # print(mainClass.dtype, midClass.dtype)
     mainClass = mainClass.find_elements(By.TAG_NAME, 'span')[0].text
     midClass = midClass.find_elements(By.TAG_NAME, 'span')[0].text
     subClass = subClass.find_elements(By.TAG_NAME, 'span')[0].text
@@ -181,7 +178,7 @@ try:
     resultList = getProductInfo(drv, cate)
     
     # Debug
-    #for item in resultList:
+    # for item in resultList:
     #    print(item)
     MakeCSV(today, resultList)
 
@@ -194,6 +191,6 @@ except:
     traceback.print_exc()
 
 finally:
-    #time.sleep(3)
+    # time.sleep(3)
     drv.quit()
     print('Quit crawlering')
