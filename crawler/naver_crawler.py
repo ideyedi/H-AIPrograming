@@ -17,16 +17,10 @@ targetURL
 webDrv = '/usr/bin/safaridriver'
 targetURL = 'https://shopping.naver.com/home/p/index.naver'
 
-#opt = webdriver.SafariOptions()
-#opt.add_argument('--incognito')
-
 drv = webdriver.Safari(executable_path=webDrv)
 
 try:
-    drv.get(targetURL)
-    category = drv.find_elements(By.CLASS_NAME, 'btn_cate_all')
-    category[0].click()
+    print('test')
 
 except:
     traceback.print_exc()
-

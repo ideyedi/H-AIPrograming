@@ -4,6 +4,10 @@
 # Apple desktop services store file 
 .DS_store
 
+# PyCharm IDEA
+.idea/
+
+#############
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
