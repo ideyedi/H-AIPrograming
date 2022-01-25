@@ -3,19 +3,19 @@
 import time
 import traceback
 import csv
-import os
+# import os
 
 from datetime import datetime as dt
 from typing import List
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
+# from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.action_chains import ActionChains
 
 
 '''
-Get Danawa product infomation
+Get Danawa product infomations
 for my research
 '''
 
@@ -78,7 +78,7 @@ def getProductInfo(drv, cate) -> List:
                 tmp.append(d_mall)
                 tmp.append(link)
 
-            except:
+            except Exception:
                 print('skip')
                 continue
 
@@ -143,8 +143,8 @@ try:
         # print('len {}'.format(len(get_items)))
 
     print('Link count : {}'.format(len(herf_list)))
-    # Access to fisrt link 
-    # 일단 하나씩 올려보면서 직접 크롤링 해보는 방향으로
+    # Access to first link
+    # 일단 하나씩 올려 보면서 직접 크롤링 해보는 방향 진행
     # 가전 index : 6
     drv.get(herf_list[8])
     
@@ -174,7 +174,6 @@ try:
 
     # Crawling product info
     # Maybe for-loop here
-    resultList = []
     resultList = getProductInfo(drv, cate)
     
     # Debug
@@ -187,10 +186,10 @@ try:
     numTab = drv.find_elements(By.CLASS_NAME, 'number_wrap')[0].find_elements(By.TAG_NAME, 'a')
     print("numTab: {}".format(len(numTab)))
         
-except:
+except Exception:
     traceback.print_exc()
 
 finally:
     # time.sleep(3)
     drv.quit()
-    print('Quit crawlering')
+    print('Quit crawling')

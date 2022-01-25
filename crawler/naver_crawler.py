@@ -1,14 +1,8 @@
 # !python 
 # encoding: UTF-8
-import time
 import traceback
-import os
-import csv
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
 
 '''
 webDrv
@@ -22,5 +16,5 @@ drv = webdriver.Safari(executable_path=webDrv)
 try:
     print('test')
 
-except:
+except Exception:
     traceback.print_exc()
