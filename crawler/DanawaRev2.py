@@ -127,41 +127,32 @@ try:
     print('Today {}'.format(today))
     
     drv.get(targetURL)
-    category = drv.find_elements(By.CLASS_NAME, 'btn_cate_all')
-    category[0].click()
 
-    # Sleep click event
-    time.sleep(3)
-    detail_list = drv.find_elements(By.CLASS_NAME, 'category-all__detail__list')
+    detail_list = drv.find_elements(By.CLASS_NAME, 'category__list__row')
     print('parsing category list : {}'.format(len(detail_list)))
 
-    # Get link list
-    for items in detail_list:
-        get_items = items.find_elements(By.CLASS_NAME, 'item')
-        a_tag = get_items[0].find_elements(By.TAG_NAME, 'a')
-        herf_list.append(a_tag[0].get_attribute('href'))
-        # print('len {}'.format(len(get_items)))
+    # 컴퓨터 index 1 클릭 이벤트 추가
+    detail_list[1].click()
+    depth_list = detail_list[1].find_elements(By.CLASS_NAME, 'category__depth__row')
+    print(f'depth count : {len(depth_list)}')
 
-    print('Link count : {}'.format(len(herf_list)))
-    # Access to first link
-    # 일단 하나씩 올려 보면서 직접 크롤링 해보는 방향 진행
-    # 가전 index : 6
-    drv.get(herf_list[8])
-    
-    product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
-    print('product count : {}'.format(len(product_list)))
+    for item in depth_list:
+        category_code = item.get_attribute('category-code')
+        # 753 is VGA code value
+        #
+        if category_code == 753:
+            item.click()
+    # Sleep for page changing
+    time.sleep(10)
 
     '''
     mainClass: 대 분류
     midClass : 중 분류
     subClass : 소 분류
     '''
-    # mainClass = drv.find_elements(By.CLASS_NAME, 'f dir_home')
-    # print('mainClass : {}'.format(len(mainClass)))
-    # print('mainClass : {}'.format(mainClass.find_elements(By.CLASS_NAME, 'a')[0].text))
     categoryList = drv.find_elements(By.CLASS_NAME, 'dir_item')
+    print(f'categoryList count : {len(categoryList)}')
     mainClass, midClass, subClass = categoryList[1], categoryList[2], categoryList[3]
-    # print(mainClass.dtype, midClass.dtype)
     mainClass = mainClass.find_elements(By.TAG_NAME, 'span')[0].text
     midClass = midClass.find_elements(By.TAG_NAME, 'span')[0].text
     subClass = subClass.find_elements(By.TAG_NAME, 'span')[0].text
@@ -171,6 +162,9 @@ try:
     cate.append(mainClass)
     cate.append(midClass)
     cate.append(subClass)
+
+    #product_list = drv.find_elements(By.CLASS_NAME, 'prod_main_info')
+    #print('product count : {}'.format(len(product_list)))
 
     # Crawling product info
     # Maybe for-loop here
