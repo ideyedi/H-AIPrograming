@@ -100,7 +100,7 @@ def MakeCSV(today, productsList):
     headers = ['main', 'mid', 'sub', 'name', 'price', 'ship', 'platform', 'link', 'label']
     rows = productsList
     
-    with open('./data/' + today+'.csv', 'w') as f:
+    with open('./data/' + today +'.csv', 'w+') as f:
         w = csv.writer(f)
         w.writerow(headers)
         ret = w.writerows(productsList)
@@ -134,16 +134,24 @@ try:
     # 컴퓨터 index 1 클릭 이벤트 추가
     detail_list[1].click()
     depth_list = detail_list[1].find_elements(By.CLASS_NAME, 'category__depth__row')
-    print(f'depth count : {len(depth_list)}')
+    print(f'depth count : { len(depth_list) }')
 
     for item in depth_list:
         category_code = item.get_attribute('category-code')
         # 753 is VGA code value
         #
-        if category_code == 753:
-            item.click()
+        if category_code == '753':
+            print(f'Found target { category_code }, type: { item }')
+            href = item.find_elements(By.CLASS_NAME, 'category__depth__btn')[0]
+            href = href.get_attribute('href')
+            print(f'herf: { href }')
+            break
+
+    # Change page
+    drv.get(href)
+
     # Sleep for page changing
-    time.sleep(10)
+    # time.sleep(10)
 
     '''
     mainClass: 대 분류
