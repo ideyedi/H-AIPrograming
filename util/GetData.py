@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 
-class GetData():
+class GetData:
     test_list = ['jungwoo', 'esji']
 
     def __init__(self):
@@ -17,4 +17,6 @@ class GetData():
             if filename not in self.except_list:
                 self.file_list.append(filename)
 
-        #print(f"{self.file_list}")
+    def merge_csv_file(self):
+
+        return 0
