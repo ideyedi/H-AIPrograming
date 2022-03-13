@@ -2,4 +2,4 @@ import GetData as gd
 
 
 getData = gd.GetData()
-getData.file_list
+print(f"result: {getData.file_list}")

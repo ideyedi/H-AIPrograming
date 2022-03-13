@@ -3,6 +3,7 @@ import os
 
 
 class GetData():
+    test_list = ['jungwoo', 'esji']
 
     def __init__(self):
         '''
