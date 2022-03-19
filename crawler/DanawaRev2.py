@@ -138,9 +138,9 @@ try:
 
     for item in depth_list:
         category_code = item.get_attribute('category-code')
-        # 753 is VGA code value
-        #
-        if category_code == '753':
+        # 753 is VGA code number
+        # 747 is CPU code number
+        if category_code == '747':
             print(f'Found target { category_code }, type: { item }')
             href = item.find_elements(By.CLASS_NAME, 'category__depth__btn')[0]
             href = href.get_attribute('href')

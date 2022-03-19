@@ -1,5 +1,8 @@
 # Crawling data set
 *.csv
+# Vim cache file
+*.swp
+*.swo
 
 # Apple desktop services store file 
 .DS_store
