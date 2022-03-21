@@ -20,3 +20,15 @@ class GetData:
     def merge_csv_file(self):
 
         return 0
+
+
+if __name__=="__main__":
+    '''
+    Debug function
+    '''
+    print("Debugging function")
+    getData = GetData()
+    # Instance variables 테스트
+    # print(f"{gd.GetData.file_list}")
+    print(f"Instance variables: {getData.file_list}")
+    print(f"Class variables: {GetData.test_list}")
