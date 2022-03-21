@@ -12,8 +12,7 @@ class GetData:
         self.file_list = []
         self.concated_list = []
         self.except_list = ['.DS_Store', 'README.md']
-        #df2144 = pd.read_csv('../data/220117.2144.csv', encoding='UTF-8')
-        #df2204 = pd.read_csv('../data/220117.2204.csv', encoding='UTF-8')
+
         for filename in os.listdir('data'):
             if filename not in self.except_list:
                 self.file_list.append(filename)
