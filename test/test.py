@@ -3,7 +3,7 @@ import os
 import yaml
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from util import GetData as gd
+from util import getDataframe as gd
 
 getData = gd.GetData()
 # Instance variables 테스트
