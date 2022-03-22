@@ -21,15 +21,20 @@ class getDataframe:
             tempFrame = pd.read_csv('./data/'+item, encoding='UTF-8')
             self.concated_list.append(tempFrame)
 
-    def getResult(self):
+    def getPreprocessedData(self):
         df = pd.concat(self.concated_list, axis=0, ignore_index=True)
-        # NaN Value 전처리, 결측시 제거
-        # Labeling이 되지 않은 데이터이기 때문에 다른 기법을 사용하지 않고 삭제 처리
+        '''
+        NaN Value 전처리, 결측시 제거
+        Labeling이 되지 않은 데이터이기 때문에 다른 기법을 사용하지 않고 삭제 처리
+        '''
         df = df.dropna(axis='index', how='any')
 
         # Feature Selection
         df = df.drop('link', axis=1)
 
+        '''
+        가격비교 전처리가 정확히 int형으로 변경이 잘 안되는데 확인이 필요할 듯 함.
+        '''
         pre_ship = df['ship'].replace( value='0', regex='[^0-9]')
         pre_ship = pre_ship.replace('', '0')
         df['ship'] = pre_ship
@@ -52,4 +57,4 @@ if __name__=="__main__":
     print(f"Instance variables: {gdf.file_list}")
     print(f"Class variables: {gdf.test_list}")
 
-    print(gdf.getResult())
+    print(gdf.getPreprocessedData())
