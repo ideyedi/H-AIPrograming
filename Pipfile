@@ -13,6 +13,7 @@ jupyterlab = "*"
 tensorflow = "*"
 matplotlib = "*"
 selenium = "*"
+pyyaml = "*"
 
 [dev-packages]
 
