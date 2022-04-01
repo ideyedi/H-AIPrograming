@@ -12,6 +12,7 @@ numpy = "*"
 jupyterlab = "*"
 tensorflow = "*"
 matplotlib = "*"
+selenium = "*"
 
 [dev-packages]
 
