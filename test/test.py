@@ -4,7 +4,7 @@ import os
 import yaml
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from util import getDataframe as gd
+from util import preprocess as gd
 
 getData = gd.getDataframe()
 # Instance variables 테스트
